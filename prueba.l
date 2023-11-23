@@ -1,107 +1,88 @@
 %{ 
-  #include<stdio.h> 
+  #include <stdio.h> 
   #include "y.tab.h" 
+  extern int yylval;
   void yyerror(char *);
 %} 
 
 %option noyywrap
-/*Declaracion*/ 
 
-
-/*Literales*/
-DIGITO      [0-9]
-ENTERO      DIGITO+
-REAL        {DIGITO}+("."{DIGITO}+)?
-MINUSCULA   [a-z]
-MAYUSCULA   [A-Z]
-CADENA      \"{DI}\"
-
-/*Definicion de Simbolos (Variables)*/
-VARIABLE    {MINUSCULA}+({MAYUSCULA}|_|{MINUSCULA}|{INT})+
-ETIQUETAS 
-/*Palabras reservadas*/
-FOR         "for"
-IF          "if"
-SWITCH      "switch"
-WHILE       "while"
-BREAK       "break"
-CONTINUE    "continue"
-GOTO        "goto"
-AUTO         "auto"
-CASE         "case"
-CHAR         "char"
-CONST        "const"
-DEFAULT      "default"
-DO           "do"
-DOUBLE       "double"
-ELSE         "else"
-ENUM         "enum"
-EXTERN       "extern"
-INT          "int"
-FLOAT        "float"
-SHORT        "short"
-LONG         "long"
-RETURN       "return"
-SIGNED       "signed"
-UNSIGNED     "unsigned"
-SIZEOF       "sizeof"
-STATIC       "static"
-STRUCT       "struct"
-VOID         "void"
-
-/*Simbolos Especiales*/
-PARENTESISL "("
-PARENTESISR ")"
-CORCHETEL   "["
-CORCHETER   "]"
-LLAVEL      "{"
-LLAVER      "}"
-PUNTO       "."
-DOSPUNTOS   ":"
-PUNTOYCOMA  ";"
-COMA        ","
-
-/*Operadores Logicos*/
-AND   "&&"
-OR    "||"
-NOT    "!"
-UNITARY_AND "&"
-UNITARY_OR  "|"
-UNITARY_NOT "~"
-
-/*Operadores Aritmeticos*/
-SUMA "+"
-RESTA "-"
-MULTIPLICACION "*"
-DIVISION  "/"
-INCREMENTO "++"
-DECREMENTO "--"
-MODULO "%"
-ASIGNACION "="
-
-/*Operadores de relacionales*/
-
-IGUALDAD   "=="
-MAYOR_QUE  ">"
-MENOR_QUE  "<"
-MAYOR_IGUAL  ">="
-MENOR_IGUAL  "<="
-DIFERENTE    "!="
-
-/*Operadores De Asignacion*/
-
-SUMA_ASIGNACION  "+="
-RESTA_ASIGNACION  "-="
-MULTIPLION_AIGNACION  "*="
-DIVISION_ASIGNACION "/="
-MODULO_ASIGNACION  "%="
-
-
-/* seccion de reglas C */
-%% 
-{IF|FOR|IF|SWITCH|WHILE|BREAK|CONTINUE|GOTO|AUTO|BREAK|CASE|CHAR|CONST|DEFAULT|DO|DOUBLE|FLOAT|SHORT|LONG|RETURN|SIGNED|UNSIGNED|SIZEOF|STATIC|STRUCT|VOID}{ yylval=atoi(yytext); return PALABRA_RESERVADA; } 
-[-()+*/;]            { return *yytext; }
-"evaluar"            { return EVALUAR; }
-[[:blank:]] ;
-.                     yyerror("Unknown character");
 %%
+
+/* Definiciones de patrones */
+DIGITO           [0-9]
+ENTERO           {DIGITO}+
+REAL             {DIGITO}+"."{DIGITO}+
+IDENTIFICADOR    [a-zA-Z_][a-zA-Z0-9_]*
+
+/* Palabras reservadas */
+"for"            { return FOR; }
+"if"             { return IF; }
+"switch"         { return SWITCH; }
+"while"          { return WHILE; }
+"break"          { return BREAK; }
+"continue"       { return CONTINUE; }
+"goto"           { return GOTO; }
+"auto"           { return AUTO; }
+"case"           { return CASE; }
+"char"           { return CHAR; }
+"const"          { return CONST; }
+"default"        { return DEFAULT; }
+"do"             { return DO; }
+"double"         { return DOUBLE; }
+"else"           { return ELSE; }
+"enum"           { return ENUM; }
+"extern"         { return EXTERN; }
+"int"            { return INT; }
+"float"          { return FLOAT; }
+"short"          { return SHORT; }
+"long"           { return LONG; }
+"return"         { return RETURN; }
+"signed"         { return SIGNED; }
+"unsigned"       { return UNSIGNED; }
+"sizeof"         { return SIZEOF; }
+"static"         { return STATIC; }
+"struct"         { return STRUCT; }
+"void"           { return VOID; }
+
+/* Números */
+{ENTERO}         { yylval = atoi(yytext); return NUMERO; }
+{REAL}           { yylval = atof(yytext); return REAL; }
+
+/* Identificadores */
+{IDENTIFICADOR}  { yylval = strdup(yytext); return IDENTIFICADOR; }
+
+/* Operadores y símbolos */
+"+"             { return SUMA; }
+"-"             { return RESTA; }
+"*"             { return MULTIPLICACION; }
+"/"             { return DIVISION; }
+"("             { return PARENTESISL; }
+")"             { return PARENTESISR; }
+"["             { return CORCHETEL; }
+"]"             { return CORCHETER; }
+"{"             { return LLAVEL; }
+"}"             { return LLAVER; }
+"."             { return PUNTO; }
+":"             { return DOSPUNTOS; }
+";"             { return PUNTOYCOMA; }
+","             { return COMA; }
+
+/* Espacios y tabulaciones */
+[ \t\r\n]+      { /* ignorar espacios en blanco */ }
+
+/* Caracteres no reconocidos */
+.               { yyerror("Caracter desconocido"); }
+
+%%
+
+
+
+int main(int argc, char **argv) {
+    /* Código para iniciar el análisis léxico */
+    return 0;
+}
+
+void yyerror(char *s) {
+    fprintf(stderr, "Error: %s\n", s);
+}
