@@ -135,7 +135,7 @@ MODULO_ASIGNACION  "%="
 {INT}           { printf("Palabra reservada int"); return palabra_reservada; }
 {DOUBLE}        { printf("Palabra reservada double"); return palabra_reservada; }
 {FLOAT}         { printf("Palabra reservada float"); return palabra_reservada; }
-{SHORT}         { printf("Palabra reservada shrot"); return palabra_reservada; }
+{SHORT}         { printf("Palabra reservada short"); return palabra_reservada; }
 {LONG}          { printf("Palabra reservada long"); return palabra_reservada; }
 {RETURN}        { printf("Palabra reservada return"); return palabra_reservada; }
 {SIGNED}        { printf("Palabra reservada signed"); return palabra_reservada; }
